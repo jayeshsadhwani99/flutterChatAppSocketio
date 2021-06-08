@@ -1,20 +1,31 @@
+import 'package:chatappsocketio/Model/ChatModel.dart';
+import 'package:chatappsocketio/Pages/IndividualPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomCard extends StatelessWidget {
-  const CustomCard({Key? key}) : super(key: key);
+  const CustomCard({Key? key, required this.chatModel}) : super(key: key);
+
+  final ChatModel chatModel;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualPage(),
+          ),
+        );
+      },
       child: Column(
         children: [
           ListTile(
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-                "assets/groups.svg",
+                chatModel.isGroup ? "assets/groups.svg" : "assets/person.svg",
                 color: Colors.white,
                 height: 37,
                 width: 37,
@@ -22,7 +33,7 @@ class CustomCard extends StatelessWidget {
               backgroundColor: Colors.blueGrey,
             ),
             title: Text(
-              "Jayesh",
+              chatModel.name,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -35,14 +46,14 @@ class CustomCard extends StatelessWidget {
                   width: 3,
                 ),
                 Text(
-                  "Hello World!",
+                  chatModel.currentMessage,
                   style: TextStyle(
                     fontSize: 13,
                   ),
                 )
               ],
             ),
-            trailing: Text("18:04"),
+            trailing: Text(chatModel.time),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 80),
