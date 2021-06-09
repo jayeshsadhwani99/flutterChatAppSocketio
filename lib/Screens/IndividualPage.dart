@@ -49,7 +49,7 @@ class _IndividualPageState extends State<IndividualPage> {
               ),
               CircleAvatar(
                 child: SvgPicture.asset(
-                  widget.chatModel.isGroup
+                  widget.chatModel.isGroup == true
                       ? "assets/groups.svg"
                       : "assets/person.svg",
                   color: Colors.white,
@@ -71,7 +71,7 @@ class _IndividualPageState extends State<IndividualPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.chatModel.name,
+                  widget.chatModel.name.toString(),
                   style: TextStyle(
                     fontSize: 18.5,
                     fontWeight: FontWeight.bold,

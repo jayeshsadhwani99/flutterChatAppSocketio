@@ -20,70 +20,71 @@ class _HomescreenState extends State<Homescreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Whatsapp"),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.search),
-            ),
-            PopupMenuButton<String>(
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    child: Text("New Group"),
-                    value: "New Group",
-                  ),
-                  PopupMenuItem(
-                    child: Text("New broadcast"),
-                    value: "New broadcast",
-                  ),
-                  PopupMenuItem(
-                    child: Text("Whatsapp Web"),
-                    value: "Whatsapp Web",
-                  ),
-                  PopupMenuItem(
-                    child: Text("Starred Messages"),
-                    value: "Starred Messages",
-                  ),
-                  PopupMenuItem(
-                    child: Text("Settings"),
-                    value: "Settings",
-                  ),
-                ];
-              },
-              onSelected: (value) {
-                print(value);
-              },
-            )
-          ],
-          bottom: TabBar(
-            controller: _controller,
-            indicatorColor: Colors.white,
-            tabs: [
-              Tab(
-                icon: Icon(Icons.camera_alt),
-              ),
-              Tab(
-                text: "CHATS",
-              ),
-              Tab(
-                text: "STATUS",
-              ),
-              Tab(
-                text: "CALLS",
-              ),
-            ],
+      appBar: AppBar(
+        title: Text("Whatsapp"),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
           ),
-        ),
-        body: TabBarView(
+          PopupMenuButton<String>(
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  child: Text("New Group"),
+                  value: "New Group",
+                ),
+                PopupMenuItem(
+                  child: Text("New broadcast"),
+                  value: "New broadcast",
+                ),
+                PopupMenuItem(
+                  child: Text("Whatsapp Web"),
+                  value: "Whatsapp Web",
+                ),
+                PopupMenuItem(
+                  child: Text("Starred Messages"),
+                  value: "Starred Messages",
+                ),
+                PopupMenuItem(
+                  child: Text("Settings"),
+                  value: "Settings",
+                ),
+              ];
+            },
+            onSelected: (value) {
+              print(value);
+            },
+          )
+        ],
+        bottom: TabBar(
           controller: _controller,
-          children: [
-            Text('camera'),
-            ChatPage(),
-            Text('status'),
-            Text('calls'),
+          indicatorColor: Colors.white,
+          tabs: [
+            Tab(
+              icon: Icon(Icons.camera_alt),
+            ),
+            Tab(
+              text: "CHATS",
+            ),
+            Tab(
+              text: "STATUS",
+            ),
+            Tab(
+              text: "CALLS",
+            ),
           ],
-        ));
+        ),
+      ),
+      body: TabBarView(
+        controller: _controller,
+        children: [
+          Text('camera'),
+          ChatPage(),
+          Text('status'),
+          Text('calls'),
+        ],
+      ),
+    );
   }
 }

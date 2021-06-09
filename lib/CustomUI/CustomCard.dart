@@ -1,5 +1,5 @@
 import 'package:chatappsocketio/Model/ChatModel.dart';
-import 'package:chatappsocketio/Pages/IndividualPage.dart';
+import 'package:chatappsocketio/Screens/IndividualPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,7 +27,9 @@ class CustomCard extends StatelessWidget {
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-                chatModel.isGroup ? "assets/groups.svg" : "assets/person.svg",
+                chatModel.isGroup == true
+                    ? "assets/groups.svg"
+                    : "assets/person.svg",
                 color: Colors.white,
                 height: 37,
                 width: 37,
@@ -35,7 +37,7 @@ class CustomCard extends StatelessWidget {
               backgroundColor: Colors.blueGrey,
             ),
             title: Text(
-              chatModel.name,
+              chatModel.name.toString(),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -48,14 +50,14 @@ class CustomCard extends StatelessWidget {
                   width: 3,
                 ),
                 Text(
-                  chatModel.currentMessage,
+                  chatModel.currentMessage.toString(),
                   style: TextStyle(
                     fontSize: 13,
                   ),
                 )
               ],
             ),
-            trailing: Text(chatModel.time),
+            trailing: Text(chatModel.time.toString()),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 80),
