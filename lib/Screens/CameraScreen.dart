@@ -1,5 +1,8 @@
+import 'package:chatappsocketio/Screens/CameraView.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 List<CameraDescription>? cameras;
 
@@ -23,6 +26,12 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _cameraController?.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -42,55 +51,72 @@ class _CameraScreenState extends State<CameraScreen> {
           Positioned(
             bottom: 0.0,
             child: Container(
-                color: Colors.black,
-                padding: EdgeInsets.only(
-                  top: 5,
-                  bottom: 5,
-                ),
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.flash_off,
-                            color: Colors.white,
-                            size: 28,
-                          ),
+              color: Colors.black,
+              padding: EdgeInsets.only(
+                top: 5,
+                bottom: 5,
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.flash_off,
+                          color: Colors.white,
+                          size: 28,
                         ),
-                        InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.panorama_fish_eye,
-                              color: Colors.white,
-                              size: 70,
-                            )),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.flip_camera_ios,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            takePhoto(context);
+                          },
+                          child: Icon(
+                            Icons.panorama_fish_eye,
                             color: Colors.white,
-                            size: 28,
-                          ),
+                            size: 70,
+                          )),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.flip_camera_ios,
+                          color: Colors.white,
+                          size: 28,
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      "Hold for Video, Tap for photo",
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "Hold for Video, Tap for photo",
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
           )
         ],
+      ),
+    );
+  }
+
+  void takePhoto(BuildContext context) async {
+    final path =
+        join((await getTemporaryDirectory()).path, "${DateTime.now()}.png");
+    await _cameraController?.takePicture(path);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder) => CameraViewPage(
+          path: path,
+        ),
       ),
     );
   }
