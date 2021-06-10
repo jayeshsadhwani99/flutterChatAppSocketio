@@ -4,6 +4,7 @@ import 'package:chatappsocketio/Model/ChatModel.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
   IndividualPage({Key? key, required this.chatModel}) : super(key: key);
@@ -16,12 +17,16 @@ class IndividualPage extends StatefulWidget {
 class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
+  late IO.Socket socket;
 
   TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    // We call socketio connect function on the init state,
+    // As we want it to initialize as soon as we enter the Individual Chat Page
+    connect();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -29,6 +34,27 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
+  }
+
+  void connect() {
+    // Connect the feontend to the backend URL
+    // Pass additional paramters
+    socket = IO.io("http://192.168.42.148:5000", <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+
+    // Connect Socketio manually
+    socket.connect();
+
+    // If it is connected
+    socket.onConnect((data) => print("Connected"));
+
+    // Check if it's connected
+    print(socket.connected);
+
+    // Send a message to the backend
+    socket.emit("/test", "Hello World!");
   }
 
   @override
