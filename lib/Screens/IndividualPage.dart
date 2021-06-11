@@ -18,6 +18,7 @@ class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
   late IO.Socket socket;
+  bool sendButton = false;
 
   TextEditingController _controller = TextEditingController();
 
@@ -222,6 +223,17 @@ class _IndividualPageState extends State<IndividualPage> {
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 5,
                                 minLines: 1,
+                                onChanged: (value) {
+                                  if (value.length > 0) {
+                                    setState(() {
+                                      sendButton = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      sendButton = false;
+                                    });
+                                  }
+                                },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Type a message",
@@ -269,7 +281,10 @@ class _IndividualPageState extends State<IndividualPage> {
                                 radius: 25,
                                 backgroundColor: Color(0xFF128C7E),
                                 child: IconButton(
-                                  icon: Icon(Icons.mic, color: Colors.white),
+                                  icon: Icon(
+                                    sendButton ? Icons.send : Icons.mic,
+                                    color: Colors.white,
+                                  ),
                                   onPressed: () {},
                                 )),
                           ),

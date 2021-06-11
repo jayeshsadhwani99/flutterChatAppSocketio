@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ButtonCard extends StatelessWidget {
   const ButtonCard({Key? key, required this.name, required this.icon})
       : super(key: key);
-  final String name;
+  final String? name;
   final IconData icon;
 
   @override
@@ -19,7 +19,7 @@ class ButtonCard extends StatelessWidget {
         backgroundColor: Color(0xFF25D366),
       ),
       title: Text(
-        name,
+        name.toString(),
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.bold,
