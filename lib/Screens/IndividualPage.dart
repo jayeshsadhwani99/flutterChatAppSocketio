@@ -7,8 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
-  IndividualPage({Key? key, required this.chatModel}) : super(key: key);
+  IndividualPage({Key? key, required this.chatModel, required this.sourceChat})
+      : super(key: key);
   final ChatModel chatModel;
+  final ChatModel? sourceChat;
 
   @override
   _IndividualPageState createState() => _IndividualPageState();
@@ -37,8 +39,8 @@ class _IndividualPageState extends State<IndividualPage> {
     });
   }
 
+  // Connect the frontend to the backend URL
   void connect() {
-    // Connect the feontend to the backend URL
     // Pass additional paramters
     socket = IO.io("http://192.168.42.148:5000", <String, dynamic>{
       "transports": ["websocket"],
@@ -54,8 +56,18 @@ class _IndividualPageState extends State<IndividualPage> {
     // Check if it's connected
     print(socket.connected);
 
-    // Send a message to the backend
-    socket.emit("/test", "Hello World!");
+    // Send the ID of the current user to the backend
+    socket.emit("signin", widget.sourceChat?.id);
+  }
+
+  // Send the message to the server
+  // The parameters are the message to be sent,
+  // the ID of the person sending the message
+  // and the ID of the person receiving the message
+  void sendMessage(String message, int? sourceId, int? targetId) {
+    // We send a JSON object on the message event
+    socket.emit("message",
+        {"message": message, "sourceID": sourceId, "targetId": targetId});
   }
 
   @override
@@ -278,15 +290,27 @@ class _IndividualPageState extends State<IndividualPage> {
                               left: 2,
                             ),
                             child: CircleAvatar(
-                                radius: 25,
-                                backgroundColor: Color(0xFF128C7E),
-                                child: IconButton(
-                                  icon: Icon(
-                                    sendButton ? Icons.send : Icons.mic,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
-                                )),
+                              radius: 25,
+                              backgroundColor: Color(0xFF128C7E),
+                              child: IconButton(
+                                icon: Icon(
+                                  sendButton ? Icons.send : Icons.mic,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  if (sendButton) {
+                                    sendMessage(
+                                      _controller.text,
+                                      widget.sourceChat?.id,
+                                      widget.chatModel.id,
+                                    );
+
+                                    // Clear the text field
+                                    _controller.clear();
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       ),

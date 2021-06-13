@@ -4,8 +4,10 @@ import 'package:chatappsocketio/Screens/SelectContact.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  ChatPage({Key? key, required this.chatModels}) : super(key: key);
+  ChatPage({Key? key, required this.chatModels, required this.sourceChat})
+      : super(key: key);
   final List<ChatModel> chatModels;
+  final ChatModel? sourceChat;
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -28,6 +30,7 @@ class _ChatPageState extends State<ChatPage> {
         itemCount: widget.chatModels.length,
         itemBuilder: (context, index) => CustomCard(
           chatModel: widget.chatModels[index],
+          sourceChat: widget.sourceChat,
         ),
       ),
     );
