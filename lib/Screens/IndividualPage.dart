@@ -1,6 +1,7 @@
 import 'package:chatappsocketio/CustomUI/OwnMessageCard.dart';
 import 'package:chatappsocketio/CustomUI/ReplyCard.dart';
 import 'package:chatappsocketio/Model/ChatModel.dart';
+import 'package:chatappsocketio/Model/MessageModel.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,6 +22,7 @@ class _IndividualPageState extends State<IndividualPage> {
   FocusNode focusNode = FocusNode();
   late IO.Socket socket;
   bool sendButton = false;
+  List<MessageModel> messages = [];
 
   TextEditingController _controller = TextEditingController();
 
@@ -51,7 +53,17 @@ class _IndividualPageState extends State<IndividualPage> {
     socket.connect();
 
     // If it is connected
-    socket.onConnect((data) => print("Connected"));
+    socket.onConnect((data) {
+      print("Connected");
+      // Listen to the message event form
+      // the server, which is triggered whenever
+      // A message is recieved
+      socket.on("message", (msg) {
+        print(msg);
+        // Call the set Message function
+        setMessage("destination", msg["message"]);
+      });
+    });
 
     // Check if it's connected
     print(socket.connected);
@@ -65,9 +77,19 @@ class _IndividualPageState extends State<IndividualPage> {
   // the ID of the person sending the message
   // and the ID of the person receiving the message
   void sendMessage(String message, int? sourceId, int? targetId) {
+    // Call the setMessage function
+    setMessage("source", message);
     // We send a JSON object on the message event
     socket.emit("message",
         {"message": message, "sourceID": sourceId, "targetId": targetId});
+  }
+
+  // Whenever a message is sent, set the state
+  void setMessage(String? type, String? message) {
+    MessageModel messageModel = MessageModel(type: type, message: message);
+    setState(() {
+      messages.add(messageModel);
+    });
   }
 
   @override
@@ -187,30 +209,19 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Stack(children: [
                 Container(
                   height: MediaQuery.of(context).size.height - 150,
-                  child: ListView(
+                  child: ListView.builder(
                     shrinkWrap: true,
-                    children: [
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                      OwnMessageCard(),
-                      ReplyCard(),
-                    ],
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      if (messages[index].type == "source")
+                        return OwnMessageCard(
+                          message: messages[index].message,
+                        );
+                      else
+                        return ReplyCard(
+                          message: messages[index].message,
+                        );
+                    },
                   ),
                 ),
                 Align(
