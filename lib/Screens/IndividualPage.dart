@@ -45,7 +45,8 @@ class _IndividualPageState extends State<IndividualPage> {
   // Connect the frontend to the backend URL
   void connect() {
     // Pass additional paramters
-    socket = IO.io("http://192.168.42.148:5000", <String, dynamic>{
+    socket =
+        IO.io("https://polar-caverns-53061.herokuapp.com/", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
