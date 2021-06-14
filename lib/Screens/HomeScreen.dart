@@ -1,6 +1,7 @@
 import 'package:chatappsocketio/Model/ChatModel.dart';
 import 'package:chatappsocketio/Pages/CameraPage.dart';
 import 'package:chatappsocketio/Pages/ChatPage.dart';
+import 'package:chatappsocketio/Pages/StatusPage.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatefulWidget {
@@ -90,7 +91,7 @@ class _HomescreenState extends State<Homescreen>
             chatModels: widget.chatModels,
             sourceChat: widget.sourceChat,
           ),
-          Text('status'),
+          StautsPage(),
           Text('calls'),
         ],
       ),
